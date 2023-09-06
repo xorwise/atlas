@@ -1,0 +1,416 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Atlas</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="robots" content="noindex, nofollow">
+
+    <style>
+        @font-face {
+            src: url('/fonts/pt-serif-v18-cyrillic_latin-regular.woff2') format('woff2');
+            font-family: 'PT Serif';font-style: normal;font-weight: 400;font-display: swap;
+        }
+    </style>
+
+    <link href="{% static 'css/uikit.andona.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/as-style.css' %}" rel="stylesheet">
+
+    <script src="{% static 'js/uikit.min.js' %}"></script>
+
+</head>
+<body>
+
+<nav id="asNavbar" class="uk-navbar-container">
+    <div class="uk-container">
+        <div class="uk-navbar">
+            <div class="uk-navbar-left">
+                <a class="uk-navbar-item uk-logo" href="">
+                    <img src="../static/img/logo.webp" width="70" height="70" alt="Logo">
+                </a>
+            </div>
+
+            <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav uk-visible@l">
+                    <li>
+                        <a href="#as-modal-balance" uk-toggle>
+                            Баланс: 100 руб.
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#as-modal-profile" uk-toggle>
+                            <img class="uk-margin-small-right" src="../static/img/icon/profile.svg" width="30" height="30" alt="profile">
+                            Профиль
+                        </a>
+                    </li>
+                </ul>
+
+                <a class="uk-navbar-toggle uk-hidden@l" uk-navbar-toggle-icon="ratio:1.1" href="#asOffcanvas" uk-toggle></a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+{% block content %}
+{% endblock %}
+
+<footer id="asFooter" class="uk-section uk-section-small">
+    <div class="uk-container uk-text-center">
+
+        <button class="uk-button uk-button-secondary uk-width-medium@l">
+            Загрузить книгу
+        </button>
+
+        <p class="uk-text-small">
+            Форматы загрузки: Epub, Fb2, Text
+        </p>
+
+    </div>
+</footer>
+
+
+
+<aside id="as-modal-profile" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            Профиль
+        </div>
+
+        <div id="as-m-profile" class="as-toggle-profile as-toggle-email as-toggle-password">
+            <div class="uk-modal-body">
+
+                <ul class="as-list-profile uk-grid-small uk-grid uk-flex-between">
+                    <li>
+                        E-mail: info@mysite.com
+                    </li>
+                    <li class="uk-margin-auto-left">
+                        <a id="as-btn-toggle-email" class="uk-link-text uk-text-small" href="#" uk-toggle="target: .as-toggle-email">
+                            Изменить E-mail
+                        </a>
+                    </li>
+                </ul>
+
+
+                <ul class="as-list-profile uk-grid-small uk-grid uk-flex-between">
+                    <li>
+                        Пароль: <span class="as-password-dotted"></span>
+                    </li>
+                    <li class="uk-margin-auto-left">
+                        <a id="as-btn-toggle-password" class="uk-link-text uk-text-small" href="#" uk-toggle="target: .as-toggle-password">
+                            Изменить пароль
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="uk-margin-medium">
+                    <a href="">
+                        Выйти из аккаунта <img src="../static/img/icon/arrow-right.svg" width="20" height="20" loading="lazy" alt="icon">
+                    </a>
+                </div>
+
+            </div>
+            <footer class="uk-modal-footer uk-text-center uk-margin-top">
+                <button class="uk-button uk-button-danger uk-width-1-1" type="button">Удалить аккаунт</button>
+            </footer>
+        </div>
+        <!-- // Окно: Профиль -->
+
+        <div id="as-m-change-email" class="as-toggle-profile as-toggle-email" hidden="">
+            <div class="uk-modal-body">
+
+                <div class="uk-margin">
+                    <input class="uk-input" type="email" placeholder="Новый E-mail.." aria-label="Новый E-mail">
+                </div>
+                <div class="uk-margin-top">
+                    <input class="uk-input" type="password" placeholder="Введите пароль.." aria-label="Введите пароль">
+                </div>
+                <div class="uk-margin-5-top">
+                    <a href="" class="uk-link-text">Не помню пароль</a>
+                </div>
+
+            </div>
+
+            <footer class="uk-modal-footer uk-text-center">
+                <button class="uk-button uk-button-secondary uk-width-1-1" type="button">Сменить E-mail</button>
+            </footer>
+        </div>
+        <!-- // Окно: Изменить E-mail -->
+
+
+        <div id="as-m-change-password" class="as-toggle-profile as-toggle-password" hidden="">
+            <div class="uk-modal-body">
+
+                <div class="">
+                    <input class="uk-input" type="password" placeholder="Текущий пароль.." aria-label="Текущий пароль">
+                </div>
+                <div class="">
+                    <a href="" class="uk-link-text">Не помню пароль</a>
+                </div>
+
+                <div class="uk-margin-top">
+                    <input class="uk-input" type="password" placeholder="Новый пароль.." aria-label="Новый пароль">
+                </div>
+
+            </div>
+
+            <footer class="uk-modal-footer uk-text-center uk-margin-5-top">
+                <button class="uk-button uk-button-secondary uk-width-1-1" type="button">Сменить пароль</button>
+            </footer>
+        </div>
+        <!-- // Окно: Изменить пароль -->
+
+        <script>
+            const asBtnEmail = document.getElementById('as-btn-toggle-email');
+            UIkit.util.on(asBtnEmail, 'click', function () {
+                UIkit.util.once('#as-modal-profile', 'hidden', '.uk-modal', function () {
+                    const asProfile = document.getElementById('as-m-profile');
+                    const asEmail   = document.getElementById('as-m-change-email');
+
+                    if (asProfile.hasAttribute('hidden')) {
+                        asProfile.removeAttribute('hidden');
+                        asEmail.setAttribute('hidden', '');
+                    }
+                })
+            })
+
+            const asBtnPassword = document.getElementById('as-btn-toggle-password');
+            UIkit.util.on(asBtnPassword, 'click', function () {
+                UIkit.util.once('#as-modal-profile', 'hidden', '.uk-modal', function () {
+                    const asProfile  = document.getElementById('as-m-profile');
+                    const asPassword = document.getElementById('as-m-change-password');
+
+                    if (asProfile.hasAttribute('hidden')) {
+                        asProfile.removeAttribute('hidden');
+                        asPassword.setAttribute('hidden', '');
+                    }
+                })
+            })
+        </script>
+
+    </div>
+</aside><!-- // Профиль -->
+
+
+<aside id="as-modal-login" class="as-modal-body-large" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+
+        <div class="uk-modal-body">
+
+            <div class="uk-text-center">
+                <img src="../static/img/logo.webp" width="100" height="100" loading="lazy" alt="Logo">
+            </div>
+
+            <div id="as-m-register" class="as-toggle-register-login">
+                <div class="">
+                    <input class="uk-input" type="email" placeholder="Введите E-mail.." aria-label="Введите E-mail">
+                </div>
+                <div class="uk-margin-5-top uk-text-small">
+                    Регистрация нужна для хранения вашей библиотеки в облаке и доступа к вашим книгам с любых устройств.
+                </div>
+
+                <div class="uk-margin-25-top">
+                    <button class="uk-button uk-button-secondary uk-width-1-1" type="button">
+                        Зарегистрироваться
+                    </button>
+                    <div class="uk-margin-5-top uk-text-small">
+                        Я согласен с условиями
+                        <a href="" class="uk-link-text">Пользовательского соглашения</a>,
+                        <a href="" class="uk-link-text">Политики конфиденциальности</a>
+                    </div>
+                </div>
+
+                <footer class="uk-text-center uk-margin-25-top">
+                    Есть аккаунт: <a href="#" class="uk-link" uk-toggle="target: .as-toggle-register-login">Войти</a>
+                </footer>
+            </div><!-- // Окно: Зарегистрироваться -->
+
+            <div id="as-m-login" class="as-toggle-register-login" hidden>
+                <div class="uk-margin-small">
+                    <input class="uk-input" type="email" placeholder="Введите E-mail.." aria-label="Введите E-mail">
+                </div>
+
+                <div class="uk-margin-top">
+                    <input class="uk-input" type="password" placeholder="Введите пароль.." aria-label="Введите пароль">
+                </div>
+                <div class="uk-margin-small-top">
+                    <a href="" class="uk-link-text">Не помню пароль</a>
+                </div>
+
+                <div class="uk-margin-25">
+                    <button class="uk-button uk-button-secondary uk-width-1-1" type="button">
+                        Войти
+                    </button>
+                </div>
+
+                <footer class="uk-text-center uk-margin-25-top">
+                    Нет аккаунта: <a href="#" class="uk-link" uk-toggle="target: .as-toggle-register-login">Регистрация</a>
+                </footer>
+            </div><!-- // Окно: Войти -->
+
+        </div>
+
+    </div>
+</aside><!-- // Войти & Зарегистрироваться -->
+
+
+<aside id="as-modal-balance" class="as-modal-container" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+
+        <div id="as-m-balance-block" class="as-toggle-balance">
+
+            <div class="uk-modal-header">
+                Баланс
+            </div>
+
+            <div class="uk-modal-body">
+
+                <div class="uk-width-medium@l uk-margin">
+                    <div class="uk-text-large">
+                        Ваш баланс: 100 руб.
+                    </div>
+                    <div class="uk-text-small">
+                        С вашего баланса автоматически списываются выбранные вами услуги.
+                    </div>
+                </div>
+
+                <div class="uk-panel uk-margin">
+                    <div class="uk-text-large">
+                        Услуги
+                    </div>
+
+                    <ul class="uk-list">
+                        <li>
+                            <div class="as-text uk-width-medium@l">
+                                Ежемесячная абонентская плата за облачное хранение книг - 99 руб.
+                            </div>
+                            <label class="as-toggle-checkbox">
+                                <input type="checkbox" checked>
+                                <span class="as-checkbox"></span>
+                            </label>
+                        </li>
+                        <li>
+                            <div class="as-text uk-width-medium@l">
+                                Переводчик текста - 10 руб за 1 000 знаков.
+                            </div>
+                            <label class="as-toggle-checkbox">
+                                <input type="checkbox" checked>
+                                <span class="as-checkbox"></span>
+                            </label>
+                        </li>
+                        <li>
+                            <div class="as-text uk-width-medium@l">
+                                Озвучивание текста - 10 руб за 1 000 знаков.
+                            </div>
+                            <label class="as-toggle-checkbox">
+                                <input type="checkbox" checked>
+                                <span class="as-checkbox"></span>
+                            </label>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <footer class="uk-modal-footer uk-text-center">
+                <button id="as-btn-toggle-balance" class="uk-button uk-button-secondary uk-width-medium@l" uk-toggle="target: .as-toggle-balance">
+                    Пополнить баланс
+                </button>
+                <div class="uk-margin-small-top">
+                    <a href="" class="uk-link-text">
+                        Платежи и списания
+                    </a>
+                </div>
+            </footer>
+
+        </div><!-- // Окно: Баланс -->
+
+
+        <div id="as-m-balance-replenishment" class="as-toggle-balance" hidden>
+
+            <div class="uk-modal-header">
+                Пополнение баланса
+            </div>
+
+            <div class="uk-modal-body">
+
+                <div id="as-modal-pay-sum" class="uk-margin">
+                    Сумма пополнения <input class="uk-input uk-form-width-small uk-form-small"
+                                            placeholder="1 000" aria-label="Сумма пополнения"> руб.
+                </div>
+                <div id="as-modal-pay-methods" class="uk-margin">
+                    Способ оплаты:
+
+                    <div uk-form-custom="target: > * > span:first-child">
+                        <select>
+                            <option value="1">Банковская карта</option>
+                            <option value="2">Вариант 02</option>
+                            <option value="3">Вариант 03</option>
+                            <option value="4">Вариант 04</option>
+                        </select>
+                        <button class="uk-button uk-button-text uk-margin-small-left" type="button" tabindex="-1">
+                            <span></span>
+                            <img src="../static/img/icon/chevron-down.svg" width="20" height="20" loading="lazy" alt="icon">
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <footer class="uk-modal-footer uk-text-center">
+                <button class="uk-button uk-button-secondary uk-width-medium@l" type="button">Пополнить баланс</button>
+            </footer>
+
+        </div><!-- // Окно: Пополнение баланса -->
+
+        <script>
+            const asBalBtn = document.getElementById('as-btn-toggle-balance');
+            UIkit.util.on(asBalBtn, 'click', function () {
+                UIkit.util.once('#as-modal-balance', 'hidden', '.uk-modal', function () {
+                    const asBlock  = document.getElementById('as-m-balance-block');
+                    const asReplen = document.getElementById('as-m-balance-replenishment');
+
+                    if (asBlock.hasAttribute('hidden')) {
+                        asBlock.removeAttribute('hidden');
+                        asReplen.setAttribute('hidden', '');
+                    }
+                })
+            })
+        </script>
+
+
+    </div>
+</aside><!-- // Баланс -->
+
+
+
+<div id="asOffcanvas" uk-offcanvas="overlay: true;flip: true">
+    <div class="uk-offcanvas-bar">
+        <button class="uk-offcanvas-close" type="button" uk-close="ratio:1.2"></button>
+
+        <ul class="uk-nav uk-nav-default">
+            <li>
+                <a href="#as-modal-balance" uk-toggle>
+                    Баланс: 100 руб.
+                </a>
+            </li>
+            <li>
+                <a href="#as-modal-profile" uk-toggle>
+                    Профиль
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+</body>
+</html>

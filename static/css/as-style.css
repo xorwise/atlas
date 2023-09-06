@@ -1,0 +1,201 @@
+@charset "UTF-8";/*! (c) 2023 AndonA https://www.andona.click  */
+
+
+#asNavbar {}
+.uk-logo {padding-left: 0;}
+.uk-navbar-nav>li>a:last-child {padding-right: 0;}
+.uk-modal {background: rgb(0 0 0 / 30%);transition: none;}
+.uk-modal-dialog {transition: none;}
+.uk-margin-5-top {margin-top:5px;}
+.uk-margin-5-bottom {margin-top:5px;}
+
+#as-sort-line {
+    display: flex;
+    align-items: center;
+    color: #757575;
+}
+#as-sort-line .uk-button {
+    margin-left: 5px;
+}
+#as-search-block .uk-drop {
+    background: #f5f5f5;
+    border: 1px solid #bdbdbd;
+    padding: 5px 15px;
+    font-size: 1rem;
+    width: 380px;
+}
+
+
+#as-list-books {
+    color: #757575;
+    font-size: 14px;
+    font-weight: 400;
+}
+#as-list-books figure {
+    margin: 0 0 5px;
+}
+#as-list-books .uk-cover-container {
+    height: 170px;
+    box-sizing: border-box;
+}
+#as-list-books h3 {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.1;
+}
+.as-btn-trash {
+    margin: 5px;
+    color: black;
+    cursor: pointer;
+}
+.as-btn-trash > .uk-icon {}
+
+
+
+#as-modal-profile {}
+#as-modal-profile .uk-modal-dialog {
+    min-height: 340px;
+    box-sizing: border-box;
+}
+@media (min-width: 1200px) {
+    #as-modal-profile .uk-modal-body {
+        padding: 20px 20px;
+    }
+}
+.as-list-profile {}
+
+.as-password-dotted {
+    display: inline-block;
+    width: 100px;
+    margin-left: 5px;
+    letter-spacing: 4px;
+}
+.as-password-dotted::before {
+    display: inline-block;
+    width: 100px;
+    content: '\2022\2022\2022\2022\2022\2022\2022\2022\2022';
+    margin-left: 2px;
+    letter-spacing: 4px;
+    vertical-align: bottom;
+}
+.as-toggle-checkbox {
+    --size: 24px;
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: var(--size);
+    flex: none;
+    overflow: hidden;
+}
+.as-toggle-checkbox > input {
+    position: absolute;
+    left: -50px;
+}
+.as-checkbox {
+    background-color: grey;
+    position: absolute;
+    inset: 0;
+    border-radius: 500px;
+    cursor: pointer;
+}
+.as-checkbox:before {
+    position: absolute;
+    content: "";
+    height: calc(var(--size) - 4px);
+    width: calc(var(--size) - 4px);
+    inset: 2px auto 2px 2px;
+    background-color: white;
+    border-radius: 50%;
+}
+.as-toggle-checkbox > input:checked + .as-checkbox {
+    background-color: green;
+}
+.as-toggle-checkbox > input:checked + .as-checkbox:before {
+    inset-inline: auto 2px;
+}
+
+#as-modal-login {}
+#as-modal-login > .uk-modal-dialog {
+    min-height: 450px;
+    box-sizing: border-box;
+}
+
+
+#as-modal-balance {}
+#as-modal-balance .uk-list > li {
+    display: flex;
+    justify-content: space-between;
+}
+#as-modal-balance .as-text {}
+#as-modal-balance .as-toggle-checkbox {
+    margin-left: 15px;
+}
+
+#as-m-balance-replenishment {
+    color: #757575;
+}
+
+#as-modal-pay-sum {
+    display: flex;
+    align-items: center;
+    color: #000;
+}
+#as-modal-pay-sum > input {
+    margin-inline: 10px;
+}
+#as-modal-pay-methods {
+    display: flex;
+    align-items: flex-end;
+}
+#as-modal-pay-methods .uk-button {}
+
+
+#asFooter{}
+#asFooter p {
+    margin-top: 5px;
+}
+
+.uk-navbar-toggle {
+    color: #000;
+}
+#asOffcanvas > .uk-offcanvas-bar {
+    background: #fff;
+    padding: 40px;
+}
+#asOffcanvas .uk-nav-default>li>a {
+    padding: 10px 0;
+    color: #000;
+    text-decoration: underline;
+}
+
+/* -------------------------------------------------------------- *
+ * ### RESP
+ * ------------------------------------------------------------ */
+@media (min-width: 1200px) {
+    .uk-container {
+        /*max-width: 740px;*/
+    }
+    .uk-navbar-nav>li:not(:first-child) {
+        margin-left: 50px;
+    }
+    .as-modal-body-large .uk-modal-body {
+        padding: 20px 35px 35px;
+    }
+    .as-modal-container .uk-modal-dialog {
+        width: 580px;
+    }
+    #as-modal-pay-methods .uk-button {
+        margin-left: 10px;
+    }
+}
+
+/* max */
+@media (max-width: 1199px) {
+    #as-modal-balance-replenishment {
+        text-align: center;
+    }
+    #as-modal-pay-sum > input  {
+        width: 80px;
+    }
+}
+@media (max-width: 639px) {}
