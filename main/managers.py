@@ -1,10 +1,14 @@
+import secrets
+import string
+from random import randint
+
 from django.contrib.auth.base_user import BaseUserManager
 
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def _create_user(self, email, password, **extra_fields):
+    def _create_user(self, email, password = None, **extra_fields):
         """
         Creates and saves a User with the given email and password.
         """

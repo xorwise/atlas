@@ -3,17 +3,25 @@ from django.core.mail import EmailMessage,  get_connection
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.utils import timezone
+
 from .managers import UserManager
 from django.conf import settings
+import secrets
+import string
+from random import randint
 
 
 # Create your models here.
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(primary_key=True)
-    date_joined = models.DateField(default=datetime.datetime.now)
+    email = models.EmailField(unique=True, blank=False)
+    date_joined = models.DateField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    balance = models.FloatField(default=0)
+    is_paid = models.BooleanField(default=0)
+    last_payment = models.DateTimeField()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -27,4 +35,29 @@ class User(AbstractBaseUser, PermissionsMixin):
             username=settings.EMAIL_HOST_USER,
             password=settings.EMAIL_HOST_PASSWORD
         ) as connection:
-            EmailMessage(subject, message, from_email, [self.email], connection=connection).send()
+            print('test')
+            resp = EmailMessage(subject, message, from_email, [self.email], connection=connection).send()
+            print(resp)
+
+
+class Book(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    author = models.CharField(max_length=100)
+    preview_image = models.ImageField(blank=True, null=True)
+    boto3_id = models.UUIDField(unique=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+
+class BookMark(models.Model):
+    id = models.AutoField(primary_key=True)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    page = models.IntegerField(default=1)
+
+
+class SubscriptionPayment(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+
