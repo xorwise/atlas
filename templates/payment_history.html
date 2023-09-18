@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{%block content%}
+<div class="payment-history-container">
+    <div class="payment-history-block">
+        <h1>Пополнения и списания</h1>
+        <ul class="payment-history-list"> 
+            {%for payment in payments %}
+            <li>
+                {%if payment.amount %}
+                    <div class="payment-left">
+                        Пополнение баланса:<span class="payment-amount">{{ payment.amount }} руб.</span>
+                        <span class="payment-success {% if payment.success %}green{%endif%}">
+                            {% if payment.success %}Успешно{% else %}Неудачно{% endif %}
+                        </span>
+                    </div>
+                    <div>
+                        {{ payment.created_at|date:'Y-m-d H:i' }}
+                    </div>
+                {%else%}
+                    <div class="payment-left">
+                        <span>Списание баланса:</span>
+                        <span class="payment-amount">{{ subscription_price }} руб.</span>
+                        <span class="payment-success green">
+                            Успешно
+                        </span>
+                    </div>
+                    <div>
+                        {{ payment.created_at|date:'Y-m-d H:i' }}
+                    </div>
+                {%endif%}
+            </li>
+            {%endfor%}
+        </ul>
+    </div>
+</div>
+{%endblock%}

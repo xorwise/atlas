@@ -34,7 +34,8 @@ def get_book_data(book: UploadedFile):
     image_content = None
     for image in ebook.get_items_of_type(ebooklib.ITEM_IMAGE):
         if "cover" in str(image):
-            image_content = image.content
+            image_content = image
+            break
     return title, author, image_content
 
 

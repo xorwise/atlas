@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+
+from celery.schedules import crontab
 from dotenv import load_dotenv
 import os
 
@@ -53,6 +55,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'atlas.urls'
+CLOUD_PAYMENTS_PUBLIC_ID = os.getenv('CLOUD_PAYMENTS_PUBLIC_ID')
 
 TEMPLATES = [
     {
@@ -66,7 +69,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'main.context_processors.add_my_login_form'
+                'main.context_processors.add_my_login_form',
+                'main.context_processors.settings_processor'
             ],
         },
     },
@@ -113,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -153,3 +157,19 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+
+
+CELERY_TIMEZONE = 'Europe/Moscow'
+
+SUBSCRIPTION_PRICE = float(os.getenv('SUBSCRIPTION_PRICE'))
+
+CELERY_BEAT_SCHEDULE = {
+    'check_subscriptions': {
+        'task': 'main.tasks.check_subscriptions',
+        'schedule': crontab(minute="*/1")
+    }
+}
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+

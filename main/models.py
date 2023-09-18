@@ -20,8 +20,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     balance = models.FloatField(default=0)
-    is_paid = models.BooleanField(default=0)
-    last_payment = models.DateTimeField()
+    payment_active = models.BooleanField(default=False)
+    is_paid = models.BooleanField(default=False)
+    last_payment = models.DateTimeField(default=timezone.now() - datetime.timedelta(days=40))
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -48,12 +49,15 @@ class Book(models.Model):
     preview_image = models.ImageField(blank=True, null=True)
     boto3_id = models.UUIDField(unique=True)
     created_at = models.DateTimeField(default=timezone.now)
+    last_opened = models.DateTimeField(default=timezone.now)
+    last_location = models.CharField(blank=True, null=True)
 
 
 class BookMark(models.Model):
     id = models.AutoField(primary_key=True)
+    name = models.CharField(blank=True, null=True)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    page = models.IntegerField(default=1)
+    location = models.CharField()
 
 
 class SubscriptionPayment(models.Model):
@@ -61,3 +65,10 @@ class SubscriptionPayment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
 
+
+class Deposit(models.Model):
+    id = models.UUIDField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.FloatField(blank=False, null=False)
+    success = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now)

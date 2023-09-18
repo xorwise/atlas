@@ -1,4 +1,5 @@
 {% load static %}
+{% load tz %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -19,8 +20,13 @@
 
     <link href="{% static 'css/uikit.andona.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/as-style.css' %}" rel="stylesheet">
-
+    <script src="https://widget.cloudpayments.ru/bundles/cloudpayments.js"></script>
     <script src="{% static 'js/uikit.min.js' %}"></script>
+    <script>
+        const email = "{{ user.email }}"
+        const publicID = "{{ public_id }}"
+        console.log(email, publicID)
+    </script>
 
 </head>
 <body>
@@ -29,7 +35,7 @@
     <div class="uk-container">
         <div class="uk-navbar">
             <div class="uk-navbar-left">
-                <a class="uk-navbar-item uk-logo" href="">
+                <a class="uk-navbar-item uk-logo" href="/">
                     <img src="../static/img/logo.webp" width="70" height="70" alt="Logo">
                 </a>
             </div>
@@ -64,11 +70,11 @@
     </div>
 </nav>
 
-<div class="server-message"><span class="server-message-success">{{ response }}</span><span class="server-message-fail">{{ exception_detail }}</span></div>
+<div class="server-message"><span class="server-message-success">{{ response }}</span><span id="serverError" class="server-message-fail">{{ exception_detail }}</span></div>
 <div class="server-message">
 {% for message in messages %}
     {% if message.tags == 'error' %}
-    <span class="server-message-fail">{{ message }}</span>
+    <span id="serverError" class="server-message-fail">{{ message }}</span>
     {% else %}
    <span class="server-message-success">{{ message }}</span>
     {% endif %}
@@ -99,7 +105,7 @@
                 </div>
 
                 <div class="uk-margin-small-top">
-                    <a href="" class="uk-link-text">Не помню пароль</a>
+                    <a href="{%url 'reset_password' %}" class="uk-link-text">Не помню пароль</a>
                 </div>
 
                 <div class="uk-margin-25">
@@ -113,7 +119,7 @@
                 </footer>
             </form>
 
-            <form method="post" id="as-m-register" class="as-toggle-register-login" hidden>
+            <form action="/" method="post" id="as-m-register" class="as-toggle-register-login" hidden>
                 {% csrf_token %}
                 <div class="">
                     <input class="uk-input" name="email" placeholder="Введите E-mail.." aria-label="Введите E-mail" required id="email" type="email">
@@ -212,7 +218,7 @@
                 <button class="uk-button uk-button-danger uk-width-1-1" onclick="document.getElementById('id01').style.display='flex'">Удалить аккаунт</button>
 
                 <div id="id01" class="modal">
-                  <form method="post" class="modal-content">
+                  <form action="/" method="post" class="modal-content">
                       {% csrf_token %}
                     <div class="delete-modal-container">
                       <h1>Удаление аккаунта</h1>
@@ -240,7 +246,7 @@
         </div>
         <!-- // Окно: Профиль -->
 
-        <form method="post" id="as-m-change-email" class="as-toggle-profile as-toggle-email" hidden="">
+        <form action="/" method="post" id="as-m-change-email" class="as-toggle-profile as-toggle-email" hidden="">
             {% csrf_token %}
             <div class="uk-modal-body">
 
@@ -251,7 +257,7 @@
                     <input required name="password" class="uk-input" type="password" placeholder="Введите пароль.." aria-label="Введите пароль">
                 </div>
                 <div class="uk-margin-5-top">
-                    <a href="" class="uk-link-text">Не помню пароль</a>
+                    <a href="{%url 'reset_password' %}" class="uk-link-text">Не помню пароль</a>
                 </div>
 
             </div>
@@ -263,7 +269,7 @@
         <!-- // Окно: Изменить E-mail -->
 
 
-        <form method="post" id="as-m-change-password" class="as-toggle-profile as-toggle-password" hidden="">
+        <form action="/" method="post" id="as-m-change-password" class="as-toggle-profile as-toggle-password" hidden="">
             {% csrf_token %}
             <div class="uk-modal-body">
 
@@ -271,7 +277,7 @@
                     <input name="old_password" class="uk-input" type="password" placeholder="Текущий пароль.." aria-label="Текущий пароль">
                 </div>
                 <div class="">
-                    <a href="" class="uk-link-text">Не помню пароль</a>
+                    <a href="{%url 'reset_password' %}" class="uk-link-text">Не помню пароль</a>
                 </div>
 
                 <div class="uk-margin-top">
@@ -338,7 +344,8 @@
                         </div>
                     </div>
 
-                    <div class="uk-panel uk-margin">
+                    <form action="/" method="post" class="uk-panel uk-margin">
+                    {% csrf_token %}
                         <div class="uk-text-large">
                             Услуги
                         </div>
@@ -349,31 +356,34 @@
                                     Ежемесячная абонентская плата за облачное хранение книг - 99 руб.
                                 </div>
                                 <label class="as-toggle-checkbox">
-                                    <input type="checkbox" checked>
+                                    <input name="payment_active" type="checkbox" {% if user.payment_active %} checked="on" {% endif %}>
                                     <span class="as-checkbox"></span>
                                 </label>
                             </li>
-                            <li>
-                                <div class="as-text uk-width-medium@l">
-                                    Переводчик текста - 10 руб за 1 000 знаков.
-                                </div>
-                                <label class="as-toggle-checkbox">
-                                    <input type="checkbox" checked>
-                                    <span class="as-checkbox"></span>
-                                </label>
-                            </li>
-                            <li>
-                                <div class="as-text uk-width-medium@l">
-                                    Озвучивание текста - 10 руб за 1 000 знаков.
-                                </div>
-                                <label class="as-toggle-checkbox">
-                                    <input type="checkbox" checked>
-                                    <span class="as-checkbox"></span>
-                                </label>
-                            </li>
+{#                            <li>#}
+{#                                <div class="as-text uk-width-medium@l">#}
+{#                                    Переводчик текста - 10 руб за 1 000 знаков.#}
+{#                                </div>#}
+{#                                <label class="as-toggle-checkbox">#}
+{#                                    <input type="checkbox" checked>#}
+{#                                    <span class="as-checkbox"></span>#}
+{#                                </label>#}
+{#                            </li>#}
+{#                            <li>#}
+{#                                <div class="as-text uk-width-medium@l">#}
+{#                                    Озвучивание текста - 10 руб за 1 000 знаков.#}
+{#                                </div>#}
+{#                                <label class="as-toggle-checkbox">#}
+{#                                    <input type="checkbox" checked>#}
+{#                                    <span class="as-checkbox"></span>#}
+{#                                </label>#}
+{#                            </li>#}
                         </ul>
+                        <div class="save-button-box">
+                            <button class="uk-width-medium@l" type="submit" name="change_payment_settings">СОХРАНИТЬ</button>
+                        </div>
 
-                    </div>
+                    </form>
 
                 </div>
 
@@ -382,50 +392,35 @@
                         Пополнить баланс
                     </button>
                     <div class="uk-margin-small-top">
-                        <a href="" class="uk-link-text">
+                        <a href="{% url 'payment_history' %}" class="uk-link-text">
                             Платежи и списания
                         </a>
                     </div>
                 </footer>
+                
+                
 
             </div><!-- // Окно: Баланс -->
 
 
             <div id="as-m-balance-replenishment" class="as-toggle-balance" hidden>
 
-                <div class="uk-modal-header">
+                 <div class="uk-modal-header">
                     Пополнение баланса
                 </div>
 
                 <div class="uk-modal-body">
 
                     <div id="as-modal-pay-sum" class="uk-margin">
-                        Сумма пополнения <input class="uk-input uk-form-width-small uk-form-small"
+                        Сумма пополнения <input id="amountInput" class="uk-input uk-form-width-small uk-form-small"
                                                 placeholder="1 000" aria-label="Сумма пополнения"> руб.
                     </div>
-                    <div id="as-modal-pay-methods" class="uk-margin">
-                        Способ оплаты:
-
-                        <div uk-form-custom="target: > * > span:first-child">
-                            <select>
-                                <option value="1">Банковская карта</option>
-                                <option value="2">Вариант 02</option>
-                                <option value="3">Вариант 03</option>
-                                <option value="4">Вариант 04</option>
-                            </select>
-                            <button class="uk-button uk-button-text uk-margin-small-left" type="button" tabindex="-1">
-                                <span></span>
-                                <img src="../static/img/icon/chevron-down.svg" width="20" height="20" loading="lazy" alt="icon">
-                            </button>
-                        </div>
-
-                    </div>
-
                 </div>
 
                 <footer class="uk-modal-footer uk-text-center">
-                    <button class="uk-button uk-button-secondary uk-width-medium@l" type="button">Пополнить баланс</button>
-                </footer>
+                    <button id="paymentBtn" class="uk-button uk-button-secondary uk-width-medium@l" type="button">Пополнить баланс</button>
+                </footer> 
+                
 
             </div><!-- // Окно: Пополнение баланса -->
 
@@ -468,6 +463,8 @@
             </ul>
         </div>
     </div>
+    <script src="{% static 'js/cloudpayments.js' %}"></script>
+    
 
 </body>
 </html>
